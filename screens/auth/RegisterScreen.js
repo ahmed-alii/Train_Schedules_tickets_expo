@@ -18,7 +18,8 @@ const validationSchema = Yup.object().shape({
     city: Yup.string()
         .label("City")
         .required()
-        .min(2, "Must have at least 2 characters"),
+        .max(3, "Must be 3 characters")
+        .min(3, "Must be 3 characters"),
     email: Yup.string()
         .label("Email")
         .email("Enter a valid email")
@@ -33,7 +34,7 @@ const validationSchema = Yup.object().shape({
     check: Yup.boolean().oneOf([true], "Please check the agreement")
 });
 
-function Signup({navigation}) {
+function Signup({navigation, route}) {
 
     const [passwordVisibility, setPasswordVisibility] = useState(true);
     const [passwordIcon, setPasswordIcon] = useState("ios-eye");
@@ -54,6 +55,7 @@ function Signup({navigation}) {
             setPasswordVisibility(!passwordVisibility);
         }
     }
+
 
     function handleConfirmPasswordVisibility() {
         if (confirmPasswordIcon === "ios-eye") {
@@ -111,100 +113,116 @@ function Signup({navigation}) {
                           handleBlur,
                           isSubmitting,
                           setFieldValue
-                      }) => (
-                        <>
-                            <FormInput
-                                name="name"
-                                value={values.name}
-                                onChangeText={handleChange("name")}
-                                placeholder="Enter your full name"
-                                iconName="md-person"
-                                iconColor="#2C384A"
-                                onBlur={handleBlur("name")}
-                            />
-                            <ErrorMessage errorValue={touched.name && errors.name}/>
-                            <FormInput
-                                name="city"
-                                value={values.city}
-                                onChangeText={handleChange("city")}
-                                placeholder="Enter your city"
-                                iconName="md-compass"
-                                iconColor="#2C384A"
-                                onBlur={handleBlur("city")}
-                            />
-                            <ErrorMessage errorValue={touched.city && errors.city}/>
-                            <FormInput
-                                name="email"
-                                value={values.email}
-                                onChangeText={handleChange("email")}
-                                placeholder="Enter email"
-                                autoCapitalize="none"
-                                iconName="ios-mail"
-                                iconColor="#2C384A"
-                                onBlur={handleBlur("email")}
-                            />
-                            <ErrorMessage errorValue={touched.email && errors.email}/>
-                            <FormInput
-                                name="password"
-                                value={values.password}
-                                onChangeText={handleChange("password")}
-                                placeholder="Enter password"
-                                iconName="ios-lock"
-                                iconColor="#2C384A"
-                                onBlur={handleBlur("password")}
-                                secureTextEntry={passwordVisibility}
-                                rightIcon={
-                                    <TouchableOpacity onPress={handlePasswordVisibility}>
-                                        <Ionicons name={passwordIcon} size={28} color="grey"/>
-                                    </TouchableOpacity>
-                                }
-                            />
-                            <ErrorMessage errorValue={touched.password && errors.password}/>
-                            <FormInput
-                                name="password"
-                                value={values.confirmPassword}
-                                onChangeText={handleChange("confirmPassword")}
-                                placeholder="Confirm password"
-                                iconName="ios-lock"
-                                iconColor="#2C384A"
-                                onBlur={handleBlur("confirmPassword")}
-                                secureTextEntry={confirmPasswordVisibility}
-                                rightIcon={
-                                    <TouchableOpacity onPress={handleConfirmPasswordVisibility}>
-                                        <Ionicons
-                                            name={confirmPasswordIcon}
-                                            size={28}
-                                            color="grey"
-                                        />
-                                    </TouchableOpacity>
-                                }
-                            />
-                            <ErrorMessage
-                                errorValue={touched.confirmPassword && errors.confirmPassword}
-                            />
-                            <CheckBox
-                                containerStyle={styles.checkBoxContainer}
-                                checkedIcon="check-box"
-                                iconType="material"
-                                uncheckedIcon="check-box-outline-blank"
-                                title="Agree to terms and conditions"
-                                checkedTitle="You agreed to our terms and conditions"
-                                checked={values.check}
-                                onPress={() => setFieldValue("check", !values.check)}
-                            />
-                            <View style={styles.buttonContainer}>
-                                <FormButton
-                                    buttonType="outline"
-                                    onPress={handleSubmit}
-                                    title="SIGNUP"
-                                    buttonColor="#F57C00"
-                                    disabled={!isValid || isSubmitting}
-                                    loading={isSubmitting}
+                      }) => {
+                        if (route.params) {
+                            if (!values.city){
+                                setFieldValue("city", route.params.stationCode)
+                            }
+                        }
+                        return (
+                            <>
+
+                                <FormInput
+                                    name="name"
+                                    value={values.name}
+                                    onChangeText={handleChange("name")}
+                                    placeholder="Enter your full name"
+                                    iconName="md-person"
+                                    iconColor="#2C384A"
+                                    onBlur={handleBlur("name")}
                                 />
-                            </View>
-                            <ErrorMessage errorValue={errors.general}/>
-                        </>
-                    )}
+                                <ErrorMessage errorValue={touched.name && errors.name}/>
+                                <FormInput
+                                    name="city"
+                                    value={values.city}
+                                    onChangeText={handleChange("city")}
+                                    placeholder="Enter your station code"
+                                    iconName="md-compass"
+                                    iconColor="#2C384A"
+                                    onBlur={handleBlur("city")}
+                                    onFocus={() => {
+                                        if (!route.params) {
+                                            navigation.navigate("Station")
+                                        } else {
+                                            setFieldValue("city", route.params.stationCode)
+                                        }
+                                    }}
+
+                                />
+                                <ErrorMessage errorValue={touched.city && errors.city}/>
+                                <FormInput
+                                    name="email"
+                                    value={values.email}
+                                    onChangeText={handleChange("email")}
+                                    placeholder="Enter email"
+                                    autoCapitalize="none"
+                                    iconName="ios-mail"
+                                    iconColor="#2C384A"
+                                    onBlur={handleBlur("email")}
+                                />
+                                <ErrorMessage errorValue={touched.email && errors.email}/>
+                                <FormInput
+                                    name="password"
+                                    value={values.password}
+                                    onChangeText={handleChange("password")}
+                                    placeholder="Enter password"
+                                    iconName="ios-lock"
+                                    iconColor="#2C384A"
+                                    onBlur={handleBlur("password")}
+                                    secureTextEntry={passwordVisibility}
+                                    rightIcon={
+                                        <TouchableOpacity onPress={handlePasswordVisibility}>
+                                            <Ionicons name={passwordIcon} size={28} color="grey"/>
+                                        </TouchableOpacity>
+                                    }
+                                />
+                                <ErrorMessage errorValue={touched.password && errors.password}/>
+                                <FormInput
+                                    name="password"
+                                    value={values.confirmPassword}
+                                    onChangeText={handleChange("confirmPassword")}
+                                    placeholder="Confirm password"
+                                    iconName="ios-lock"
+                                    iconColor="#2C384A"
+                                    onBlur={handleBlur("confirmPassword")}
+                                    secureTextEntry={confirmPasswordVisibility}
+                                    rightIcon={
+                                        <TouchableOpacity onPress={handleConfirmPasswordVisibility}>
+                                            <Ionicons
+                                                name={confirmPasswordIcon}
+                                                size={28}
+                                                color="grey"
+                                            />
+                                        </TouchableOpacity>
+                                    }
+                                />
+                                <ErrorMessage
+                                    errorValue={touched.confirmPassword && errors.confirmPassword}
+                                />
+                                <CheckBox
+                                    containerStyle={styles.checkBoxContainer}
+                                    checkedIcon="check-box"
+                                    iconType="material"
+                                    uncheckedIcon="check-box-outline-blank"
+                                    title="Agree to terms and conditions"
+                                    checkedTitle="You agreed to our terms and conditions"
+                                    checked={values.check}
+                                    onPress={() => setFieldValue("check", !values.check)}
+                                />
+                                <View style={styles.buttonContainer}>
+                                    <FormButton
+                                        buttonType="outline"
+                                        onPress={handleSubmit}
+                                        title="SIGNUP"
+                                        buttonColor="#F57C00"
+                                        disabled={!isValid || isSubmitting}
+                                        loading={isSubmitting}
+                                    />
+                                </View>
+                                <ErrorMessage errorValue={errors.general}/>
+                            </>
+                        )
+                    }}
                 </Formik>
                 <Button
                     title="Have an account? Login"

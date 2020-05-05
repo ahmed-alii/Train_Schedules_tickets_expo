@@ -6,6 +6,7 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import UserContext from "./connection/userContext";
 import AuthNavigation from "./navigation/AuthNavigation";
 import {getData} from "./connection/AsyncStorage";
+import DetailsScreen from "./screens/DetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default App = () => {
                             <NavigationContainer>
                                 <Stack.Navigator>
                                     <Stack.Screen name="Root" component={BottomTabNavigator}/>
+                                    <Stack.Screen name="Details" component={DetailsScreen} />
                                 </Stack.Navigator>
                             </NavigationContainer>
                         </View>

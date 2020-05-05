@@ -1,10 +1,7 @@
 import React, {useState} from "react";
-import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View, Alert} from 'react-native'
+import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native'
 import {ListItem, SearchBar} from "react-native-elements";
-import {searchStations} from "../constants/stations";
-import {Firebase} from "../connection/comms";
-import {saveData} from "../connection/AsyncStorage";
-import UserContext from "../connection/userContext";
+import {searchStations} from "../../constants/stations";
 
 
 export default function SearchScreen({navigation}) {
@@ -35,8 +32,6 @@ export default function SearchScreen({navigation}) {
     }
 
     return (
-        <UserContext.Consumer>
-            {({loggedIn, setLoggedin}) => (
         <SafeAreaView style={styles.container}>
             <SearchBar
                 platform="ios"
@@ -63,23 +58,12 @@ export default function SearchScreen({navigation}) {
                                     </Text>
                                 </View>
                             }
-                            onLongPress={() => {
-                                Firebase.updateCity(code, loggedIn.uid).then(r => {
-                                    if (r === true) {
-                                        setLoggedin(previousState => ({...previousState, city: code}));
-                                        saveData(loggedIn).then(
-                                            Alert.alert("Default station updated.", name)
-                                        )
-                                    }
-                                })
-                            }}
                             key={key}
                             title={name}
                             titleStyle={{fontWeight: "bold"}}
-                            subtitle={"👉🏼 "+code}
+                            subtitle={code}
                             onPress={()=>{
-                                navigation.navigate("Details", {
-                                    stationName: name,
+                                navigation.navigate("Register", {
                                     stationCode: code
                                 });
                             }}
@@ -89,8 +73,6 @@ export default function SearchScreen({navigation}) {
                 })}
             </ScrollView>
         </SafeAreaView>
-            )}
-        </UserContext.Consumer>
     )
 
 }

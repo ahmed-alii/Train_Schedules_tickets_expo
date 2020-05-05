@@ -4,12 +4,14 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import SearchStack from "./SearchStack";
 import SearchScreen from "../screens/SearchScreen";
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
 export default function BottomTabNavigator({navigation, route}) {
+
     navigation.setOptions({headerTitle: getHeaderTitle(route)});
 
     return (
@@ -28,7 +30,7 @@ export default function BottomTabNavigator({navigation, route}) {
                 component={SearchScreen}
                 options={{
                     title: 'Search',
-                    tabBarIcon: ({focused}) => <TabBarIcon focused={focused} name="md-search"/>,
+                    tabBarIcon: ({focused}) => <TabBarIcon focused={focused} name="md-search"/>
                 }}
             />
 
@@ -52,6 +54,6 @@ function getHeaderTitle(route) {
         case 'Profile':
             return 'Profile';
         case 'Search':
-            return 'Search Train Tickets';
+            return 'Search Trains';
     }
 }

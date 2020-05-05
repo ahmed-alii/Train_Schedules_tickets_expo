@@ -65,6 +65,21 @@ export const Firebase = {
                 });
                 return dataArray
             });
-    }
+    },
 };
+
+export const Fetch = {
+    getData: (stationCode) => {
+        const URL = "http://transportapi.com/v3/uk/train/station/"+stationCode+"/live.json?app_id=d40b0b1a&app_key=0f0404c12a6bdebfb462189386af7263"
+        return fetch(URL, {
+            method: 'get',
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            return data;
+        }).catch(r => {
+            console.log(r)
+        });
+    }
+}
 

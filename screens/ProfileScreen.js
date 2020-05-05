@@ -1,6 +1,6 @@
 import React from 'react';
 import {KeyboardAvoidingView, ScrollView, StyleSheet, View} from 'react-native';
-import {Avatar, Button, ListItem} from "react-native-elements";
+import {Avatar, Button, ListItem, Text} from "react-native-elements";
 import UserContext from "../connection/userContext";
 import {deleteUserData, saveData} from "../connection/AsyncStorage";
 import {Firebase} from "../connection/comms";
@@ -10,7 +10,7 @@ export default function ProfileScreen() {
     return (
         <UserContext.Consumer>
             {({loggedIn, setLoggedin}) => (
-                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "padding"}
                                       style={styles.container}>
                     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                         <View style={{alignItems: "center", marginBottom: 20}}>
@@ -47,6 +47,8 @@ export default function ProfileScreen() {
                                 }
                             }}
                         />
+                        <Text style={{paddingHorizontal: 20}}>Please write the 3 letter station code. Search for station codes in search tab.</Text>
+                        <Text style={{paddingHorizontal: 20}}>You can also change default station by long-pressing the station in search tab.</Text>
                         <Button
                             onPress={() => {
                                 Firebase.updateCity(loggedIn.city, loggedIn.uid).then(r => {
