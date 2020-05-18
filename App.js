@@ -11,7 +11,7 @@ import DetailsScreen from "./screens/DetailsScreen";
 const Stack = createStackNavigator();
 
 export default App = () => {
-    // todo: make it false
+    // This is the entry point of the app. If the state exists, it will take us to the app's innser screens. it state does not exist, it will take us to the login stack.
     console.disableYellowBox = true;
     const [loggedIn, setLoggedin] = useState(undefined);
 
@@ -28,6 +28,7 @@ export default App = () => {
     const value = {loggedIn, setLoggedin};
 
     if (loggedIn) {
+        //This is the Main App Stack
         return (
             <UserContext.Provider value={value}>
                 <UserContext.Consumer>
@@ -47,6 +48,7 @@ export default App = () => {
         );
     } else {
         return (
+            //This is the Authentications screen stack.
             <UserContext.Provider value={value}>
                 <UserContext.Consumer>
                     {({loggedIn, setLoggedin}) => (
